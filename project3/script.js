@@ -1,11 +1,11 @@
 
 
-function generatePN_Diode(Wp, Wn, divId,RANGE) {
+function generatePN_diode(divId, Wp, Wn, Range) {
     const layout = {
         title: 'Struktura diody PN',
         xaxis: {
             title: 'Pozycja',
-            range: RANGE,  // Przestrzeń na całej szerokości diody
+            range: Range,  // Przestrzeń na całej szerokości diody
             showgrid: false,
             zeroline: false,
         },
@@ -15,6 +15,7 @@ function generatePN_Diode(Wp, Wn, divId,RANGE) {
             showgrid: false,
             zeroline: false
         },
+
         shapes: [
             // Obszar p-typ (niebieski)
             {
@@ -57,17 +58,8 @@ function generatePN_Diode(Wp, Wn, divId,RANGE) {
 
     Plotly.newPlot(divId, [], layout);
 }
-function generateRHO(q,Na,Nd,Wp,Wn,RANGE, divId) {
 
-    
-    const qNa = q*Na;
-    const qNd = q*Nd;
-
-    console.log("q", q)
-    console.log("Na", Na)
-    console.log("Nd", Nd)
-    console.log("qNd", qNd)
-    console.log("qNa", qNa)
+function generateChargeDensityChart(divId, qNa, qNd, Wp, Wn, RangeX, RangeY) {
 
     var rhoP = {
         x: [-Wp, 0, 0, -Wp, -Wp], // Zamykamy kwadrat wracając do -0.5
@@ -91,8 +83,8 @@ function generateRHO(q,Na,Nd,Wp,Wn,RANGE, divId) {
     // Układ wykresu (layout)
     var layout = {
         title: 'Charge density',
-        xaxis: { title: 'X-axis', zeroline: true, range: RANGE},
-        yaxis: { title: 'Y-axis', zeroline: true },
+        xaxis: { title: 'X-axis', zeroline: true, range: RangeX },
+        yaxis: { title: 'Y-axis', zeroline: true, range: RangeY },
         showlegend: false
     };
 
@@ -106,60 +98,39 @@ function generateRHO(q,Na,Nd,Wp,Wn,RANGE, divId) {
 const q = 1.6e-19; // Ładunek elementarny (C)
 const epsilon_s = 11.7 * 8.85e-12; // Przenikalność elektryczna krzemu (F/m)
 
-// Funkcja obliczająca W, Wn i Wp
-function obliczWnWp(N_A, N_D, V_b, V) {
-    // N_A i N_D w jednostkach [m^-3]
-    // V_b i V w jednostkach [V]
 
-    // Całkowita szerokość warstwy zubożonej
-    const W = Math.sqrt((2 * epsilon_s * (V_b - V) / q) * ((N_A + N_D) / (N_A * N_D)));
-
-    // Obliczenia dla Wn i Wp
-    const Wp = W * (N_D / (N_A + N_D));
-    const Wn = W * (N_A / (N_A + N_D));
-
-    // Zwracanie wyników
-    return {
-        W: W,
-        Wn: Wn,
-        Wp: Wp
-    };
-}
 
 function update() {
-    const mantysaNA = parseInt($('#sliderNAMantysa').val());
-    const rzadNA = parseInt($('#sliderNARzad').val());
-    const N_A = mantysaNA * Math.pow(10, rzadNA);
-    const mantysaND = parseInt($('#sliderNDMantysa').val());
-    const rzadND = parseInt($('#sliderNDRzad').val());
-    const N_D = mantysaND * Math.pow(10, rzadND);
+    const Nd = parseInt($('#sliderNDMantysa').val()) * Math.pow(10, parseInt($('#sliderNDRzad').val()));
+    const Na = parseInt($('#sliderNAMantysa').val()) * Math.pow(10, parseInt($('#sliderNARzad').val()));
+    const L = parseInt($('#sliderLMantysa').val()) * Math.pow(10, parseInt($('#sliderLRzad').val()));
     const V_b = parseFloat($('#sliderVb').val());
     const V = parseFloat($('#sliderV').val());
-    const { Wn, Wp } = obliczWnWp(N_A, N_D, V_b, V);
-    const mantysaL = parseInt($('#sliderLMantysa').val());
-    const rzadL = parseInt($('#sliderLRzad').val());
-    const L = mantysaL * Math.pow(10, rzadL);
 
-    $('#valueL').text(`${mantysaL}e${rzadL}`);
-    $('#valueNA').text(N_A.toExponential(2));
-    $('#valueND').text(N_D.toExponential(2));
+    $('#valueL').text(L.toExponential(2));
+    $('#valueNA').text(Nd.toExponential(2));
+    $('#valueND').text(Na.toExponential(2));
     $('#valueVb').text(V_b.toFixed(2));
     $('#valueV').text(V.toFixed(2));
 
+    const W = Math.sqrt((2 * epsilon_s * (V_b - V) / q) * ((Nd + Na) / (Nd * Na)));
+    const Wn = W * (Na / (Nd + Na));
+    const Wp = W * (Nd / (Nd + Na));
+
+    const qNa = q * Na;
+    const qNd = q * Nd;
+
+    const maxQNDA = (qNa > qNd) ? qNa : qNd;
+    const RangeY = [-maxQNDA, maxQNDA];
+    const RangeX = [-L, L];
+
+    // Wyswietlanie danych
     $('#resultWn').text(Wn.toExponential(2));
     $('#resultWp').text(Wp.toExponential(2));
 
-    const Wdiode = L;
-    const RANGE = [-L,L];
-    const WWn = Wn / Wdiode;
-    const WWp = Wp / Wdiode;
-
-    console.log("Wn =", Wn, "m");
-    console.log("Wp =", Wp, "m");
-
     // Rysowanie wykresu
-    generatePN_Diode(Wp, Wn, 'P-N_diode', RANGE);
-    generateRHO(q,N_A,N_D,Wp,Wn, RANGE, 'charge-density');
+    generatePN_diode('P-N_diode', Wp, Wn, RangeX);
+    generateChargeDensityChart('charge-density', qNa, qNd, Wp, Wn, RangeX, RangeY);
 }
 
 $('input[type="range"]').on('input', update);
