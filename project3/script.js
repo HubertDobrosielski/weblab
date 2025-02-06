@@ -1,13 +1,13 @@
 
 
-function generatePN_Diode(Wp, Wn) {
-    return {
+function generatePN_Diode(Wp, Wn, divId,RANGE) {
+    const layout = {
         title: 'Struktura diody PN',
         xaxis: {
             title: 'Pozycja',
-            range: [-1, 1],  // Przestrzeń na całej szerokości diody
+            range: RANGE,  // Przestrzeń na całej szerokości diody
             showgrid: false,
-            zeroline: false
+            zeroline: false,
         },
         yaxis: {
             title: 'Obszar',
@@ -54,6 +54,50 @@ function generatePN_Diode(Wp, Wn) {
             }
         ]
     };
+
+    Plotly.newPlot(divId, [], layout);
+}
+function generateRHO(q,Na,Nd,Wp,Wn,RANGE) {
+
+    
+    const qNa = q*Na;
+    const qNd = q*Nd;
+
+    console.log("q", q)
+    console.log("Na", Na)
+    console.log("Nd", Nd)
+    console.log("qNd", qNd)
+    console.log("qNa", qNa)
+
+    var rhoP = {
+        x: [-Wp, 0, 0, -Wp, -Wp], // Zamykamy kwadrat wracając do -0.5
+        y: [-qNa, -qNa, 0, 0, -qNa],
+        mode: 'lines',
+        fill: 'toself',
+        name: 'Kwadrat -1',
+        line: { color: 'blue' }
+    };
+
+    // Drugi trace (kwadrat o wartości +1)
+    var rhoN = {
+        x: [0, Wn, Wn, 0, 0],
+        y: [0, 0, qNd, qNd, 0],
+        mode: 'lines',
+        fill: 'toself',
+        name: 'Kwadrat +1',
+        line: { color: 'red' }
+    };
+
+    // Układ wykresu (layout)
+    var layout = {
+        title: 'rho',
+        xaxis: { title: 'X-axis', zeroline: true, range: RANGE},
+        yaxis: { title: 'Y-axis', zeroline: true },
+        showlegend: false
+    };
+
+    // Renderowanie wykresu
+    Plotly.newPlot('rho', [rhoP, rhoN], layout);
 }
 
 
@@ -83,58 +127,41 @@ function obliczWnWp(N_A, N_D, V_b, V) {
 }
 
 function update() {
-    // Przykładowe wartości:
-    // const N_A = 1e24;  // Koncentracja akceptorów (m^-3)
-    // const N_D = 1e24;  // Koncentracja donorów (m^-3)
-    // const V_b = 0.7;   // Potencjał bariery (V)
-    // const V = 0.2;     // Napięcie przyłożone (V)
-
     const mantysaNA = parseInt($('#sliderNAMantysa').val());
     const rzadNA = parseInt($('#sliderNARzad').val());
     const N_A = mantysaNA * Math.pow(10, rzadNA);
-
     const mantysaND = parseInt($('#sliderNDMantysa').val());
     const rzadND = parseInt($('#sliderNDRzad').val());
     const N_D = mantysaND * Math.pow(10, rzadND);
-
     const V_b = parseFloat($('#sliderVb').val());
     const V = parseFloat($('#sliderV').val());
-
-    // Wywołanie funkcji
     const { Wn, Wp } = obliczWnWp(N_A, N_D, V_b, V);
-
     const mantysaL = parseInt($('#sliderLMantysa').val());
     const rzadL = parseInt($('#sliderLRzad').val());
     const L = mantysaL * Math.pow(10, rzadL);
 
     $('#valueL').text(`${mantysaL}e${rzadL}`);
-    $('#mantysaL').text(mantysaL);
-    $('#rzadL').text(rzadL);
-
-
     $('#valueNA').text(N_A.toExponential(2));
     $('#valueND').text(N_D.toExponential(2));
     $('#valueVb').text(V_b.toFixed(2));
     $('#valueV').text(V.toFixed(2));
 
-
     $('#resultWn').text(Wn.toExponential(2));
     $('#resultWp').text(Wp.toExponential(2));
 
     const Wdiode = L;
+    const RANGE = [-L,L];
     const WWn = Wn / Wdiode;
     const WWp = Wp / Wdiode;
 
-    console.log("Wn =", WWn, "m");
-    console.log("Wp =", WWp, "m");
-
-    layout = generatePN_Diode(WWp, WWn);
+    console.log("Wn =", Wn, "m");
+    console.log("Wp =", Wp, "m");
 
     // Rysowanie wykresu
-    Plotly.newPlot('P-N_diode', [], layout);
+    generatePN_Diode(Wp, Wn, 'P-N_diode', RANGE);
+    generateRHO(q,N_A,N_D,Wp,Wn, RANGE);
 }
-$('input[type="range"]').on('input', update);
 
-// Początkowa aktualizacja wyników
+$('input[type="range"]').on('input', update);
 $(document).ready(update);
 
