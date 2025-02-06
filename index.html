@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebLab</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .project {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .project img {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+        }
+        .project a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+        }
+        .project a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Projekty WebLab</h1>
+    <div id="projects-container"></div>
+
+    <script>
+        fetch('projects.json')
+            .then(response => response.json())
+            .then(data => {
+                const projectsContainer = document.getElementById('projects-container');
+                data.projects.forEach(project => {
+                    const projectDiv = document.createElement('div');
+                    projectDiv.classList.add('project');
+
+                    const projectImage = document.createElement('img');
+                    projectImage.src = `${project.folder}/image.jpg`;
+
+                    const projectLink = document.createElement('a');
+                    projectLink.href = `${project.folder}/index.html`;
+                    projectLink.textContent = project.name;
+
+                    projectDiv.appendChild(projectImage);
+                    projectDiv.appendChild(projectLink);
+                    projectsContainer.appendChild(projectDiv);
+                });
+            });
+    </script>
+</body>
+</html>

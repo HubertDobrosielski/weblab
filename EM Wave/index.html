@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fale elektromagnetyczne w 3D</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #chart {
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+</head>
+
+<body>
+    
+
+    <div>
+        <label for="amplitude">Amplituda E0:</label>
+        <input type="range" id="amplitude" min="0.1" max="5" step="0.1" value="1">
+        <span id="amplitudeValue">1</span>
+    </div>
+    <div>
+        <label for="frequency">Częstotliwość (Hz):</label>
+        <input type="range" id="frequency" min="0.1" max="10" step="0.1" value="1">
+        <span id="frequencyValue">1</span>
+    </div>
+    <div>
+        <label for="wavelength">Długość fali (m):</label>
+        <input type="range" id="wavelength" min="0.1" max="10" step="0.1" value="1">
+        <span id="wavelengthValue">1</span>
+    </div>
+    <div>
+        <label for="time">Czas (s):</label>
+        <input type="range" id="time" min="0" max="5" step="0.01" value="0">
+        <span id="timeValue">0</span>
+    </div>
+    <div>
+        <label for="velocity">Prędkośc fali [m/s]:</label>
+        <input type="range" id="velocity" min="0.1" max="5" step="0.1" value="1">
+        <span id="velocityValue">1</span>
+    </div>
+
+    <div id="chart"></div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

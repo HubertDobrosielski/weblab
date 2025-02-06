@@ -1,0 +1,17 @@
+{
+  "projects": [
+      {
+          "name": "EM Wave",
+          "folder": "EM_Wave"
+      },
+      {
+          "name": "Projekt 2",
+          "folder": "project2"
+      },
+      {
+          "name": "Projekt 3",
+          "folder": "project3"
+      }
+  ]
+}
+

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt 3</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <style>
+        .slider-wrapper {
+            text-align: center;
+            background-color: aquamarine;
+        }
+
+        #N_section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            /* Możesz dostosować odległość między elementami */
+            width: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="slider-wrapper">
+        <!-- Sekcja centralna (V_b, L, V) -->
+        <div class="center-section">
+            <div class="slider-container">
+                <div class="slider-label">V_b (Potencjał bariery) [V]: <span id="valueVb">0.7</span></div>
+                <input type="range" id="sliderVb" min="0.1" max="1" step="0.01" value="0.7">
+            </div>
+            <div class="slider-container">
+                <div class="slider-label">L (Długość diody) [m]: <span id="valueL">1e-6</span></div>
+                <label>Wartość:</label>
+                <input type="range" id="sliderLMantysa" min="1" max="9" step="1" value="1"> <span id="mantysaL">1</span>
+                <br>
+                <label>Rząd (10^x):</label>
+                <input type="range" id="sliderLRzad" min="-7" max="-6" step="1" value="-6"> <span id="rzadL">-6</span>
+            </div>
+            <div class="slider-container">
+                <div class="slider-label">V (Napięcie przyłożone) [V]: <span id="valueV">0.2</span></div>
+                <input type="range" id="sliderV" min="0" max="0.7" step="0.01" value="0.2">
+            </div>
+        </div>
+
+        <div id="N_section">
+            <div class="right-section">
+                <div class="slider-container">
+                    <div class="slider-label">N_D (Koncentracja donorów) = <span id="valueND">1e24</span> [m^-3]</div>
+                    <label>Wartość:</label>
+                    <input type="range" id="sliderNDMantysa" min="1" max="9" step="1" value="1"> <span
+                        id="mantysaND">1</span>
+                    <br>
+                    <label>Rząd (10^x):</label>
+                    <input type="range" id="sliderNDRzad" min="22" max="25" step="1" value="24"> <span
+                        id="rzadND">24</span>
+                </div>
+            </div>
+
+            <div class="left-section">
+                <div class="slider-container">
+                    <div class="slider-label">N_A (Koncentracja akceptorów) = <span id="valueNA">1e24</span> [m^-3]
+                    </div>
+                    <label>Wartość:</label>
+                    <input type="range" id="sliderNAMantysa" min="1" max="9" step="1" value="1"> <span
+                        id="mantysaNA">1</span>
+                    <br>
+                    <label>Rząd (10^x):</label>
+                    <input type="range" id="sliderNARzad" min="22" max="25" step="1" value="24"> <span
+                        id="rzadNA">24</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="result">
+        <strong>W (Szerokość warstwy zubożonej):</strong> <span id="resultW">0</span> m
+    </div>
+    <div class="result">
+        <strong>Wn (Szerokość po stronie n):</strong> <span id="resultWn">0</span> m
+    </div>
+    <div class="result">
+        <strong>Wp (Szerokość po stronie p):</strong> <span id="resultWp">0</span> m
+    </div>
+
+
+    <div id="P-N_diode"></div>
+    <script src="script.js"></script>
+</body>
+
+</html>
