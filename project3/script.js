@@ -57,7 +57,7 @@ function generatePN_Diode(Wp, Wn, divId,RANGE) {
 
     Plotly.newPlot(divId, [], layout);
 }
-function generateRHO(q,Na,Nd,Wp,Wn,RANGE) {
+function generateRHO(q,Na,Nd,Wp,Wn,RANGE, divId) {
 
     
     const qNa = q*Na;
@@ -90,14 +90,14 @@ function generateRHO(q,Na,Nd,Wp,Wn,RANGE) {
 
     // Układ wykresu (layout)
     var layout = {
-        title: 'rho',
+        title: 'Charge density',
         xaxis: { title: 'X-axis', zeroline: true, range: RANGE},
         yaxis: { title: 'Y-axis', zeroline: true },
         showlegend: false
     };
 
     // Renderowanie wykresu
-    Plotly.newPlot('rho', [rhoP, rhoN], layout);
+    Plotly.newPlot(divId, [rhoP, rhoN], layout);
 }
 
 
@@ -159,7 +159,7 @@ function update() {
 
     // Rysowanie wykresu
     generatePN_Diode(Wp, Wn, 'P-N_diode', RANGE);
-    generateRHO(q,N_A,N_D,Wp,Wn, RANGE);
+    generateRHO(q,N_A,N_D,Wp,Wn, RANGE, "charge-density");
 }
 
 $('input[type="range"]').on('input', update);
