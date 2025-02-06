@@ -159,7 +159,7 @@ function update() {
 
     // Rysowanie wykresu
     generatePN_Diode(Wp, Wn, 'P-N_diode', RANGE);
-    generateRHO(q,N_A,N_D,Wp,Wn, RANGE, "charge-density");
+    generateRHO(q,N_A,N_D,Wp,Wn, RANGE, 'charge-density');
 }
 
 $('input[type="range"]').on('input', update);
