@@ -1,27 +1,5 @@
 {
   "projects": [
-<<<<<<< HEAD
-      {
-          "name": "EM Wave",
-          "folder": "EM_Wave"
-      },
-      {
-          "name": "Projekt 2",
-          "folder": "project2"
-      },
-      {
-          "name": "P-N Diode",
-          "folder": "project3"
-      },
-      {
-        "name": "test",
-        "folder": "test_slider"
-    }
-  ]
-}
-=======
->>>>>>> 511e286 (Create slider.js, update sliders, fix calculation problem (when Vb >= Vth))
-
     {
       "name": "P-N Diode",
       "folder": "PN_diode"
