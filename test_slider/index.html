@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suwaki – Mantysa, Rząd i Duże Liczby</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .slider-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .slider-wrapper label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .slider-wrapper input {
+      margin-right: 10px;
+      width: 200px;
+    }
+
+    .result {
+      font-weight: bold;
+      color: #007acc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="s1"></div>
+  <div id="s2"></div>
+  <div id="s3"></div>
+
+  <script>
+    function createSlider10exp(containerId, title, min, max, step, options = {}) {
+
+      const {
+        Type = 'linear',
+        TrueZero = false
+      } = options;
+
+      if (TrueZero == true) {
+        min = min - step;
+      }
+
+      const container = $('#' + containerId);
+
+      // Tworzymy strukturę HTML dla suwaka
+      const sliderWrapper = $('<div class="slider-wrapper"></div>');
+      const label = $('<label for="' + containerId + '_slider">' + title + '</label>');
+      const slider = $('<input type="range" id="' + containerId + '_slider" min="' + min + '" max="' + max + '" step="' + step + '" value="0">');
+      const result = $('<span class="result" id="' + containerId + '_result">0</span>');
+
+      // Dodajemy elementy do kontenera
+      sliderWrapper.append(label, slider, result);
+      container.append(sliderWrapper);
+
+      // Obsługa suwaka
+      slider.on('input', function () {
+        const val = parseFloat(this.value);
+        const wynik = val < 0 ? 0 : Math.pow(10, val);
+        result.text(wynik === 0 ? wynik : wynik.toExponential(2));
+      });
+
+      // Wywołanie na początku, aby ustawić wynik
+      slider.trigger('input');
+
+      // Zwracamy obiekt suwaka, aby móc odczytać jego nazwę i inne dane
+      return {
+        sliderElement: slider,
+        resultElement: result,
+        name: title,
+        getValue: function() {
+          return parseFloat(slider.val());
+        },
+        getResult: function() {
+          return result.text();
+        }
+      };
+    }
+
+    // Tworzymy suwaki w kontenerach #s1, #s2, #s3
+    const slider1 = createSlider10exp('s1', 'N_a (Suwak 1)', 0, 20, 0.1, {TrueZero: true});
+    const slider2 = createSlider10exp('s2', 'N_fa (Suwak 2)', 0, 30, 0.1);
+    const slider3 = createSlider10exp('s3', 'N_a_2 (Suwak 3)', 0, 40, 0.1);
+
+    // Możesz teraz odczytać nazwę suwaka i jego wynik:
+    console.log(slider1.name); // Wyświetli: N_a (Suwak 1)
+    console.log(slider2.getValue()); // Wyświetli wartość suwaka 2
+    console.log(slider3.getResult()); // Wyświetli wynik suwaka 3
+  </script>
+</body>
+
+</html>

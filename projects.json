@@ -9,9 +9,13 @@
           "folder": "project2"
       },
       {
-          "name": "Projekt 3",
+          "name": "P-N Diode",
           "folder": "project3"
-      }
+      },
+      {
+        "name": "test",
+        "folder": "test_slider"
+    }
   ]
 }
 
