@@ -7,11 +7,14 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: grey;
+            text-align: center;
         }
         .project {
             margin: 20px;
             display: flex;
             align-items: center;
+            background-color: rgb(190, 190, 190);
         }
         .project img {
             width: 100px;
@@ -42,7 +45,7 @@
                     projectDiv.classList.add('project');
 
                     const projectImage = document.createElement('img');
-                    projectImage.src = `${project.folder}/image.jpg`;
+                    projectImage.src = `${project.folder}/image.png`;
 
                     const projectLink = document.createElement('a');
                     projectLink.href = `${project.folder}/index.html`;
