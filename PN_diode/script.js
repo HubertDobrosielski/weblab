@@ -94,12 +94,12 @@ function generateChargeDensityChart(divId, qNa, qNd, Wp, Wn, maxAbsX, maxAbsY) {
 const q = 1.6e-19; // Ładunek elementarny (C)
 const epsilon_s = 11.7 * 8.85e-12; // Przenikalność elektryczna krzemu (F/m)
 
-const Vb_Slider = createSlider10exp('Vb_Slider', 'Bias Voltage', -5, 5, 0.1, 0.1, { TrueZero: true, Type: 'linear' });
-const Vth_Slider = createSlider10exp('Vth_Slider', 'Threshold Voltage', 0.1, 1, 0.05, 0.7, { TrueZero: true, Type: 'linear' });
+const Vb_Slider = createSlider('Vb_Slider', 'Bias Voltage', -5, 5, 0.1, 0.1, { TrueZero: true, Type: 'linear' });
+const Vth_Slider = createSlider('Vth_Slider', 'Threshold Voltage', 0.1, 1, 0.05, 0.7, { TrueZero: true, Type: 'linear' });
 
-const Na_Slider = createSlider10exp('Na_Slider', 'Na', 0, 20, 0.1, 10, { TrueZero: true, Type: '10exp' });
-const Nd_Slider = createSlider10exp('Nd_Slider', 'Nd', 0, 20, 0.1, 10, { TrueZero: true, Type: '10exp' });
-const DiodeL_Slider = createSlider10exp('DiodeL_Slider', 'Diode length', 0, 20, 0.1, 10, { TrueZero: true, Type: '10exp' });
+const Na_Slider = createSlider('Na_Slider', 'Na', 0, 20, 0.1, 10, { TrueZero: true, Type: '10exp' });
+const Nd_Slider = createSlider('Nd_Slider', 'Nd', 0, 20, 0.1, 10, { TrueZero: true, Type: '10exp' });
+const DiodeL_Slider = createSlider('DiodeL_Slider', 'Diode length', 0, 20, 0.1, 10, { TrueZero: true, Type: '10exp' });
 
 
 function update() {
