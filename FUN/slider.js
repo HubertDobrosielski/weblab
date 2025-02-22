@@ -1,4 +1,4 @@
-function createSlider10exp(containerId, title, min, max, step, defaultVal, options = {}) {
+function createSlider(containerId, title, min, max, step, defaultVal, options = {}) {
 
     const {
         Type = 'linear',
