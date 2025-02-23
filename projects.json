@@ -7,6 +7,12 @@
     {
       "name": "Snell's law",
       "folder": "snell_law"
+    },
+    
+    {
+      "name": "test",
+      "folder": "test"
     }
+    
   ]
 }

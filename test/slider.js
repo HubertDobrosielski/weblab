@@ -2,27 +2,17 @@ console.log("slider.js loaded");
 
 function createSlider(containerId, title, min, max, step, defaultVal, options = {}) {
     console.log("slider created");
+
     const {
         type = 'linear',
-        trueZero = false,
         onChange = null
     } = options;
 
-    // Sprawdzenie, czy kontener istnieje
-    const container = document.getElementById(containerId);
-    if (!container) {
-        console.error(`Container with id "${containerId}" not found.`);
-        return;
-    }
-
-    // Dostosowanie min, jeśli trueZero jest aktywne
-    if (trueZero) {
-        min -= step;
-    }
-
     // Tworzenie struktury HTML dla suwaka
-    const sliderWrapper = document.createElement('div');
-    sliderWrapper.className = 'slider-wrapper';
+    // const sliderWrapper = document.createElement('div');
+    // sliderWrapper.className = 'slider-wrapper';
+
+    const sliderWrapper = $('<div>').addClass('slider-wrapper');
 
     const label = document.createElement('label');
     label.setAttribute('for', `${containerId}_slider`);
@@ -80,3 +70,23 @@ function createSlider(containerId, title, min, max, step, defaultVal, options = 
         getResult: () => result.textContent
     };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Sprawdzenie, czy kontener istnieje
+    // const container = document.getElementById(containerId);
+    // if (!container) {
+    //     console.error(`Container with id "${containerId}" not found.`);
+    //     return;
+    // }

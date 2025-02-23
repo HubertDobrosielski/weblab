@@ -1,31 +1,38 @@
-
-
-// Funkcja do obliczania kąta załamania zgodnie z prawem Snella
 function snellsLaw(n1, n2, theta1) {
     return Math.asin((n1 / n2) * Math.sin(theta1));
 }
-
-function Rad2Angle(angle_rad) {
-    return angle_rad * Math.PI / 180;
+function rad2deg(radians) {
+    return radians * (180 / Math.PI);
+}
+function deg2rad(degrees) {
+    return degrees * (Math.PI / 180);
 }
 
-// Funkcja do rysowania wizualizacji
-function drawPlot(n1, n2, theta1) {
-    const theta1Rad = Rad2Angle(theta1);
-    const theta2Rad = snellsLaw(n1, n2, theta1Rad);
+function drawPlot(theta1rad, theta2rad) {
 
-    const theta1RadForChart = -theta1Rad; 
-    const theta2RadForChart = -theta2Rad - Math.PI; 
+    const theta1RadForChart = -theta1rad;
+    const theta2RadForChart = -theta2rad - Math.PI;
 
-    // Współrzędne dla promienia padającego
     const line1 = { x: [0, Math.sin(theta1RadForChart)], y: [0, Math.cos(theta1RadForChart)] };
     const line2 = { x: [0, Math.sin(theta2RadForChart)], y: [0, Math.cos(theta2RadForChart)] };
 
     const layout = {
         title: 'Snell\'s Law Visualization',
-        xaxis: { range: [-1, 1], title: 'X Axis' },
-        yaxis: { range: [-1, 1], title: 'Y Axis' },
-        showlegend: true,
+        showlegend: false, // Ukrywa legendę
+        autosize: true, // Automatyczne dopasowanie rozmiaru wykresu
+        margin: { l: 0, r: 0, t: 0, b: 0 }, // Minimalne marginesy
+        xaxis: {
+            range: [-1, 1],
+            showgrid: false, // Ukrywa siatkę (kratkę) na osi X
+            showline: false, // Ukrywa linię osi X
+            showticklabels: false // Ukrywa etykiety osi X
+        },
+        yaxis: {
+            range: [-1, 1],
+            showgrid: false, // Ukrywa siatkę (kratkę) na osi Y
+            showline: false, // Ukrywa linię osi Y
+            showticklabels: false // Ukrywa etykiety osi Y
+        }
         //annotations: annotations
     };
 
@@ -33,36 +40,35 @@ function drawPlot(n1, n2, theta1) {
         [
             { x: line1.x, y: line1.y, mode: 'lines', name: 'Incident Ray', line: { color: 'red', width: 2 } },
             { x: line2.x, y: line2.y, mode: 'lines', name: 'Refracted Ray', line: { color: 'blue', width: 2 } },
-            { x: [-1,1], y: [0,0] , mode: 'lines', name: 'Border', line: { color: 'black', width: 4 } },
-            //{ x: normalX, y: normalY, mode: 'lines', name: 'Normal', line: { color: 'green', width: 2, dash: 'dash' } },
+            { x: [-1, 1], y: [0, 0], mode: 'lines', name: 'Border', line: { color: 'black', width: 4 } },
+            { x: [0, 0], y: [-1, 1], mode: 'lines', name: 'Normal', line: { color: 'green', width: 2, dash: 'dash' } },
             //{ x: incidentArc.x, y: incidentArc.y, mode: 'lines', name: 'Incident Angle', line: { color: 'orange', width: 2 } },
             //{ x: refractedArc.x, y: refractedArc.x, mode: 'lines', name: 'Refracted Angle', line: { color: 'purple', width: 2 } },
         ]
         , layout);
 }
 
-
-
-// ******************************************************************************
-
-// Początkowe wartości parametrów
-let n1 = 1.0;
-let n2 = 1.5;
-let theta1 = 45;
-
-// Funkcja do aktualizacji wykresu
 function updatePlot() {
-    n1 = parseFloat(document.getElementById('n1').value);
-    n2 = parseFloat(document.getElementById('n2').value);
-    theta1 = parseFloat(document.getElementById('theta1').value);
-    drawPlot(n1, n2, theta1);
+    console.log("update");
+    const n1 = slider_n1.GetVal();
+    const n2 = slider_n2.GetVal();
+    const theta1 = slider_theta1.GetVal();
+    const theta1rad = deg2rad(theta1);
+    const theta2rad = snellsLaw(n1, n2, theta1rad);
+    console.log("n1: ", n1, "n2: ", n2, "theta1: ", theta1, "theta1rad: ", theta1rad, "theta2rad: ", theta2rad);
+    drawPlot(theta1rad, theta2rad);
 }
 
-// Inicjalizacja wykresu
-drawPlot(n1, n2, theta1);
+// ******************************************************************************
+const slider_n1 = createSlider({ containerId: 'n1_param', min: 1, max: 2, step: 0.1, onChange: updatePlot })
+const slider_n2 = createSlider({ containerId: 'n2_param', min: 1, max: 2, step: 0.1, onChange: updatePlot })
+const slider_theta1 = createSlider({ containerId: 'theta1_param', min: 0, max: 90, step: 1, onChange: updatePlot })
 
+updatePlot();
 
-
+$(window).on('resize', function() {
+    updatePlot();
+});
 
 
 
